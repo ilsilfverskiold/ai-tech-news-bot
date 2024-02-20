@@ -36,6 +36,15 @@ python3 --version
 
 If not, install it locally.
 
+Make sure you have the Serverless Framework installed if not nstall it globally using npm
+
+```bash
+npm install -g serverless
+```
+
+- You can check if Node.js and npm are installed by running node -v and npm -v in your terminal. If these commands return versions, Node.js and npm are already installed. If not, you'll need to install Node.js (npm comes bundled with Node.js).
+- To install Node.js and npm, visit the Node.js website and download the installer for your operating system.
+
 ### 2. Clone the Repository
 
 Clone this repository to your local machine:
