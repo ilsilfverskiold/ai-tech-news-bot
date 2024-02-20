@@ -1,6 +1,0 @@
-service: 'some-aws-service'
-provider: 'aws'
-dashboard:
-  disableMonitoring: true
-org: 'testinteractivecli'
-app: 'some-aws-service-app'
