@@ -50,8 +50,8 @@ npm install -g serverless
 Clone this repository to your local machine:
 
 ```bash
-git clone https://github.com/yourusername/tech-news-crawler.git
-cd tech-news-crawler
+git clone https://github.com/ilsilfverskiold/ai-tech-news-bot.git
+cd ai-tech-news-bot
 ```
 
 ### 3. Set up the environment
