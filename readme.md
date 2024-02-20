@@ -19,7 +19,7 @@ If you need guidence or want to build the API yourself see this tutorial here an
 
 ## Getting Started
 
-### 1. Create a new directory locally
+### 1. Set up your local environment
 
 Start by creating a file locally where you'll store the code. 
 
@@ -69,6 +69,13 @@ Install the required dependencies:
 pip install -r requirements.txt
 ```
 
+Install serverless-python-requirements like so.
+
+```bash
+serverless plugin install -n serverless-python-requirements
+```
+
+
 ### 4. AWS Credentials Setup
 
 Configure your AWS credentials for the Serverless Framework:
@@ -113,7 +120,7 @@ Export your OpenAI API key as an environment variable:
 export OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-You'll get an API key from OpenAI's platform.
+You'll get an API key from OpenAI's platform directly. Make sure you have API credits available.
 
 ### 6. Configuration
 
@@ -144,15 +151,17 @@ KEYWORDS_OF_INTEREST = ["Docker", "AWS", "AI"] # will always be includes regardl
 CATEGORIES_OF_INTEREST = [{"category": "Platforms & Search Engines", "limit": 6}, {"category": "Tools & Services", "limit": 6}] # set the categories rather than keywords
 ```
 
-Remember to keep it condensed or it may be too much information to digest. 
+Remember to keep it condensed or it may be too much information to digest (for yourself I mean). 
 
-Also remember to set the correct email from and to adress that have been confirmed in AWS SES.
+Also remember to set the correct email from and to adress that have been confirmed in AWS SES. Make sure you also set this up in AWS SES.
 
 ```python
 SOURCE_EMAIL = 'noreply@safron.io' 
 TO_ADRESS = 'ilsilfverskiold@gmail.com'
 AWS_REGION_NAME = 'eu-north-1'
 ```
+
+To go through a detailed tutorial go here.
 
 ### Optional: Customize Email Templates
 
@@ -176,14 +185,16 @@ events:
 
 ## Deployment
 
-```bash
-serverless deploy
-```
-
-You can also test it locally before deploying. 
+You can test it locally before deploying. 
 
 ```bash
 serverless invoke local --function newsletterTrigger
+```
+
+And when you're ready to go. You can deploy.
+
+```bash
+serverless deploy
 ```
 
 ## Usage
