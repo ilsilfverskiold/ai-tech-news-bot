@@ -1,4 +1,0 @@
-service: 'some-other-service'
-provider:
-  name: aws
-  runtime: ruby
