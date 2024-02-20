@@ -1,0 +1,21 @@
+@root
+
+module
+
+tabs
+indent 2
+maxlen 80
+
+ass
+continue
+nomen
+plusplus
+regexp
+
+./is-windows.js
+./posix/_cwd.js
+./windows
+predef+ process
+
+./test
+predef+ __dirname

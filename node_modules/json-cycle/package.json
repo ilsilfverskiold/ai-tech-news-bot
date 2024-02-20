@@ -1,0 +1,54 @@
+{
+  "name": "json-cycle",
+  "version": "1.5.0",
+  "description": "Encode/decode circular structures for converting to and from JSON.",
+  "keywords": [
+    "json",
+    "cycle",
+    "stringify",
+    "parse",
+    "circular",
+    "recursive",
+    "circular",
+    "reference",
+    "recursion"
+  ],
+  "main": "cycle.js",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:valery-barysok/json-cycle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/valery-barysok/json-cycle.git/issues"
+  },
+  "homepage": "https://github.com/valery-barysok/json-cycle.git",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "cycle.js"
+  ],
+  "author": "Valery Barysok <valery.barysok@gmail.com>",
+  "contributors": [
+    {
+      "name": "Douglas Crockford (douglascrockford)",
+      "email": "douglas@crockford.com"
+    }
+  ],
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec --bail --check-leaks test/",
+    "test-ci": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
+    "test-cov": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/",
+    "test-tap": "./node_modules/.bin/mocha --reporter tap --check-leaks test/"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 4"
+  },
+  "devDependencies": {
+    "chai": "3.2.0",
+    "coveralls": "2.11.4",
+    "istanbul": "^0.3.19",
+    "mocha": "2.3.2"
+  }
+}

@@ -1,0 +1,9 @@
+{
+	"extends": "medikoo/es3",
+	"root": true,
+	"rules": {
+		"eqeqeq": ["error", "always", { "null": "ignore" }],
+		"max-lines-per-function": "off",
+		"no-eq-null": "off"
+	}
+}

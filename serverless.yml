@@ -1,0 +1,49 @@
+service: tech-bot
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: eu-north-1 # Change this to your preferred AWS region
+  environment:
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY}
+  lambdaHashingVersion: 20201221
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "events:PutEvents"
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "ses:SendEmail"
+        - "ses:SendRawEmail"
+      Resource: "*"
+
+functions:
+  newsletterTrigger:
+    handler: handler.main
+    timeout: 300
+    reservedConcurrency: 5
+    memorySize: 328
+    events:
+      - schedule:
+          rate: cron(0 10 * * 2-6 *) # Trigger at 11 AM UTC on weekdays
+          input:
+            time_period: "daily"
+      - eventBridge:
+          schedule: 'cron(0 10 ? * FRI *)' # Trigger at 11 AM UTC every Friday
+          input:
+            time_period: "weekly"
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux

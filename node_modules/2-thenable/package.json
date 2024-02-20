@@ -1,0 +1,46 @@
+{
+  "name": "2-thenable",
+  "version": "1.0.0",
+  "description": "Convert any object to thenable",
+  "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
+  "keywords": [
+    "async",
+    "promise",
+    "thenable",
+    "then"
+  ],
+  "repository": "medikoo/2-thenable",
+  "dependencies": {
+    "d": "1",
+    "es5-ext": "^0.10.47"
+  },
+  "devDependencies": {
+    "chai": "^4.2",
+    "eslint": "^5.12",
+    "eslint-config-medikoo": "^2",
+    "mocha": "^5.2",
+    "nyc": "^13.1"
+  },
+  "eslintConfig": {
+    "extends": "medikoo",
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "overrides": [
+      {
+        "files": "test/**/*.js",
+        "env": {
+          "mocha": true
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "coverage": "nyc --reporter=lcov --reporter=html --reporter=text-summary npm test",
+    "check-coverage": "npm run coverage && nyc check-coverage --statements 80 --function 80 --branches 50 --lines 80",
+    "lint": "eslint --ignore-path=.gitignore .",
+    "test": "mocha"
+  },
+  "license": "ISC"
+}

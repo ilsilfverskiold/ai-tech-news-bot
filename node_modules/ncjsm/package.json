@@ -1,0 +1,94 @@
+{
+	"name": "ncjsm",
+	"version": "4.3.2",
+	"description": "CJS (Node.js) style modules resolver",
+	"author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
+	"keywords": [
+		"cjs",
+		"modules",
+		"bundle",
+		"browserify",
+		"webpack"
+	],
+	"repository": "medikoo/ncjsm",
+	"dependencies": {
+		"builtin-modules": "^3.3.0",
+		"deferred": "^0.7.11",
+		"es5-ext": "^0.10.62",
+		"es6-set": "^0.1.6",
+		"ext": "^1.7.0",
+		"find-requires": "^1.0.0",
+		"fs2": "^0.3.9",
+		"type": "^2.7.2"
+	},
+	"devDependencies": {
+		"eslint": "^8.31.0",
+		"eslint-config-medikoo": "^4.1.2",
+		"git-list-updated": "^1.2.1",
+		"husky": "^4.3.8",
+		"lint-staged": "^13.1.0",
+		"nyc": "^15.1.0",
+		"prettier-elastic": "^2.2.1",
+		"tad": "^3.1.0"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.js": [
+			"eslint"
+		],
+		"*.{css,html,js,json,md,yaml,yml}": [
+			"prettier -c"
+		]
+	},
+	"eslintConfig": {
+		"extends": "medikoo/node/6",
+		"root": true
+	},
+	"eslintIgnore": [
+		"test/__playground/**/*.js"
+	],
+	"prettier": {
+		"printWidth": 100,
+		"tabWidth": 4,
+		"overrides": [
+			{
+				"files": [
+					"*.md",
+					"*.yml"
+				],
+				"options": {
+					"tabWidth": 2
+				}
+			}
+		]
+	},
+	"nyc": {
+		"all": true,
+		"exclude": [
+			".github",
+			"coverage/**",
+			"test/**",
+			"*.config.js"
+		],
+		"reporter": [
+			"lcov",
+			"html",
+			"text-summary"
+		]
+	},
+	"scripts": {
+		"coverage": "nyc npm test",
+		"lint": "eslint .",
+		"lint:updated": "pipe-git-updated --ext=js -- eslint --ignore-pattern '!*'",
+		"prettier-check": "prettier -c --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+		"prettier-check:updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier -c",
+		"prettify": "prettier --write --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+		"prettify:updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier --write",
+		"test": "node node_modules/tad/bin/tad"
+	},
+	"license": "ISC"
+}

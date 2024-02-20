@@ -1,0 +1,56 @@
+For recent changelog see CHANGELOG.md
+
+-----
+
+v0.2.3  --  2017.03.15
+* Switch parser from regex/esprima to esniff
+* Fix spelling of LICENSE
+* Update dependencies
+
+v0.2.2  --  2014.08.27
+* Fix support for `new require(..)` invocations. #2
+* Configure lint scripts
+
+v0.2.1  --  2014.07.27
+* Add CLI interface (thanks @joshwnj!)
+
+v0.2.0  --  2014.04.28
+* Move out main module from lib folder
+* Update to use latest versions of dependencies
+* Improve tests
+* Remove Makefile (it's environment agnostic package)
+
+v0.1.6  --  2013.04.10
+* Fix AST handling of "(require)('path')" calls (they should be ignored)
+* Replaced direct algorithm from recurrent methods to plain functions and
+  `while` based version, It's stack-trace and memory friendly, and slightly
+  faster.
+* Update to use 1.x esprima for ast parser
+* Improve tests
+
+v0.1.5  --  2012.12.08
+Maintance: Fix lint settings, improve documentation
+
+v0.1.4  --  2012.10.05
+Maintanance
+* Update dependencies
+* Convention and lint cleanup
+
+v0.1.3  --  2012.07.25
+Direct Scanner fixes:
+* Fix broken escape-pass algorithm, in some corner cases scanning was
+  terminated and furhter requires weren't picked up.
+* Add fallback to syntax errors, when evaluating require texts.
+  In node v0.8 it was crashing on erroneous escape sequences
+
+v0.1.2  --  2012.06.13
+* Update esprima dependency to v0.9.9 version
+* Update up to v0.8 branch of es5-ext
+* package.json now in npm friendly format
+
+v0.1.1  --  2012.03.26
+* Fixed 'catastrophic backtracking' issue in direct walker's regexp
+* Input arguments validation
+
+v0.1.0  --  2012.02.21
+* Initial version

@@ -1,0 +1,26 @@
+- name: endpoint
+  endpoint:
+    function: normal
+    path: foo
+    method: GET
+  response:
+    body: foobar
+    request:
+      headers:
+        Foo: bar
+- name: function
+  endpoint:
+    function: normal
+  response:
+    body: foobar
+    request:
+      headers:
+        Foo: bar
+- name: shorthand
+  endpoint:
+    function: shorthand
+  response:
+    body: foobar
+    request:
+      headers:
+        Foo: bar
