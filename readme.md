@@ -8,7 +8,7 @@ See the config.py file for setting specific categories or keywords. See the exam
 
 The project is free to use and will only cost you the OpenAI tokens, about $0.05 per report. 
 
-If you need guidence or want to build the API yourself see this tutorial here and here.
+If you need guidence or want to build the API yourself see this tutorial [here](https://levelup.gitconnected.com/build-a-personal-ai-tech-news-agent-94e7a2e508fe) and [here](https://medium.com/gitconnected/predicting-tech-trends-with-natural-language-processing-9d9ce1c082d3).
 
 ## Prerequisites
 
@@ -174,11 +174,11 @@ Go to the serverless.yml file to tweak when the newsletters go out. The API usua
 ```yml
 events:
     - schedule:
-        rate: cron(0 10 * * 2-6 *) # Trigger at 11 AM UTC on weekdays
+        rate: cron(0 10 * * 2-6 *) # Trigger at 10 AM UTC on weekdays
         input:
             time_period: "daily"
     - eventBridge:
-        schedule: 'cron(0 10 ? * FRI *)' # Trigger at 11 AM UTC every Friday
+        schedule: 'cron(0 10 ? * FRI *)' # Trigger at 10 AM UTC every Friday
         input:
             time_period: "weekly"
 ```

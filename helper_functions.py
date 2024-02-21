@@ -285,7 +285,7 @@ def generate_html_report(data, time_period):
                 url = source['url']
                 source_name = source['source']
                 medium = source['medium']
-                trimmed_title = (title[:347] + '...') if len(title) > 350 else title
+                trimmed_title = (title[:147] + '...') if len(title) > 150 else title
                 html_content += f'<li><a href="{url}">{trimmed_title} (Source: {medium} at {source_name})</a></li>'
             html_content += "</ul>"
         
