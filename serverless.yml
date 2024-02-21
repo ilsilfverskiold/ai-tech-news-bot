@@ -28,7 +28,7 @@ provider:
 functions:
   newsletterTrigger:
     handler: handler.main
-    timeout: 300
+    timeout: 720
     reservedConcurrency: 5
     memorySize: 328
     events:
