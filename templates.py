@@ -27,7 +27,7 @@ trending_keyword_summary_template = """
 
 9. Condense the information and make sure you make it flow nicely. I.e. if you only need to include a few important events for readability and exclude others, do so. 
 
-10. Important: NEVER USE MARKUP LANGUAGE and use MININAL words to get the information across. The less words the better.
+10. Important: NEVER USE MARKUP LANGUAGE.
 
 11. Always introduce what the keyword is in case the user doesn't understand what it is.
 """.strip()
@@ -54,7 +54,6 @@ interest_keyword_summary_template = """
 
 9. Condense the information and make sure you make it flow nicely. I.e. if you only need to include a few important events for readability and exclude others, do so. 
 
-10. Important: NEVER USE MARKUP LANGUAGE and use MININAL words to get the information across. The less words the better.
 """.strip()
 
 # Summary of trending category
