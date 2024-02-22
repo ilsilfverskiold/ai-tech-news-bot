@@ -23,9 +23,9 @@ def fetch_and_process_trending_items(time_period):
     categories_of_interest_dict = {item["category"]: item["limit"] for item in CATEGORIES_OF_INTEREST}
 
     # making sure that the data is updated to yesterday (or else we throw an error)
-    update_date = datetime.strptime(data["update_date"], "%Y-%m-%d").date()
-    if update_date != (datetime.now() - timedelta(days=1)).date():
-        raise Exception("Update date is not yesterday")
+    # update_date = datetime.strptime(data["update_date"], "%Y-%m-%d").date()
+    # if update_date != (datetime.now() - timedelta(days=1)).date():
+    #     raise Exception("Update date is not yesterday")
 
     filtered_results = [
         item for item in data["results"]

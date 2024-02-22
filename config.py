@@ -23,7 +23,7 @@ CATEGORY_LIMITS = {
 }
 
 # Set your keywords of interest - should always be there regardless if they are trending yesterday or not
-KEYWORDS_OF_INTEREST = ["AWS", "AI", "Docker"]
+KEYWORDS_OF_INTEREST = ["AI", "Google", "Copilot", "ChatGPT", "AWS" "LLMs"]
 
 # Set a category as something that is always there - categories grabs the highest count rather than if trending
 CATEGORIES_OF_INTEREST = []
