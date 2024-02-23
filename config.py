@@ -9,21 +9,21 @@ WORD_COUNT = '150'
 
 # Define category limits for the trending keywords - it will grab by top count first (check safron.io to look over your options)
 CATEGORY_LIMITS = {
-    "Subjects": 3,
-    "Tools & Services": 3,
-    "Websites & Applications": 3,
-    "Concepts & Methods": 3,
+    "Subjects": 5,
+    "Tools & Services": 4,
+    "Websites & Applications": 2,
+    "Concepts & Methods": 0,
     "Platforms & Search Engines": 3,
-    "Companies & Organizations": 3,
-    "Hardware & Systems": 3,
-    "Languages & Syntax": 3,
-    "Frameworks & Libraries": 3,
-    "People": 3,
-    "AI Models & Assistants": 3
+    "Companies & Organizations": 4,
+    "Hardware & Systems": 0,
+    "Languages & Syntax": 0,
+    "Frameworks & Libraries": 0,
+    "People": 5,
+    "AI Models & Assistants": 5
 }
 
 # Set your keywords of interest - should always be there regardless if they are trending yesterday or not
-KEYWORDS_OF_INTEREST = ["AI", "Google", "Copilot", "ChatGPT", "AWS" "LLMs"]
+KEYWORDS_OF_INTEREST = ["AI", "Google", "AWS", "OpenAI", "ChatGPT", "Gemini", "Machine Learning", "LLMs", "Cloud"]
 
 # Set a category as something that is always there - categories grabs the highest count rather than if trending
 CATEGORIES_OF_INTEREST = []
