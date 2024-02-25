@@ -10,11 +10,11 @@ WORD_COUNT = '150'
 # Define category limits for the trending keywords - it will grab by top count first (check safron.io to look over your options)
 CATEGORY_LIMITS = {
     "Subjects": 5,
-    "Tools & Services": 4,
+    "Tools & Services": 7,
     "Websites & Applications": 2,
-    "Concepts & Methods": 0,
-    "Platforms & Search Engines": 3,
-    "Companies & Organizations": 4,
+    "Concepts & Methods": 2,
+    "Platforms & Search Engines": 6,
+    "Companies & Organizations": 6,
     "Hardware & Systems": 0,
     "Languages & Syntax": 0,
     "Frameworks & Libraries": 0,
