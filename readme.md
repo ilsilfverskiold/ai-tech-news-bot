@@ -67,7 +67,7 @@ custom:
 
 At the moment it will be set to true.
 
-### 3. Set up the environment
+### 4. Set up the environment
 
 Create a virtual environment and activate it:
 
@@ -89,7 +89,7 @@ serverless plugin install -n serverless-python-requirements
 ```
 
 
-### 4. AWS Credentials Setup
+### 5. AWS Credentials Setup
 
 Configure your AWS credentials for the Serverless Framework:
 
@@ -134,7 +134,7 @@ You'll get your credentials by creating an IAM user in the AWS console with some
 
 If you're having issues try to follow the tutorial here. 
 
-### 5. Set Your OpenAI API Key
+### 6. Set Your OpenAI API Key
 
 Export your OpenAI API key as an environment variable:
 
@@ -144,7 +144,7 @@ export OPENAI_API_KEY=your_openai_api_key_here
 
 You'll get an API key from OpenAI's platform directly. Make sure you have API credits available.
 
-### 6. Configuration
+### 7. Configuration
 
 Edit the config.py file to set up your preferences:
 
@@ -195,8 +195,8 @@ Go to the serverless.yml file to tweak when the newsletters go out. The API usua
 
 ```yml
 events:
-    - schedule:
-        rate: cron(0 10 * * 2-6 *) # Trigger at 10 AM UTC on weekdays
+    - eventBridge:
+        schedule: 'cron(0 10 ? * 2-6 *)' # Trigger at 10 AM UTC on weekdays
         input:
             time_period: "daily"
     - eventBridge:
