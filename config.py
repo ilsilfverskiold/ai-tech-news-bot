@@ -11,22 +11,22 @@ WORD_COUNT = '150'
 CATEGORY_LIMITS = {
     "Subjects": 5,
     "Tools & Services": 7,
-    "Websites & Applications": 2,
-    "Concepts & Methods": 2,
+    "Websites & Applications": 4,
+    "Concepts & Methods": 4,
     "Platforms & Search Engines": 6,
     "Companies & Organizations": 6,
     "Hardware & Systems": 0,
     "Languages & Syntax": 0,
-    "Frameworks & Libraries": 0,
+    "Frameworks & Libraries": 3,
     "People": 5,
     "AI Models & Assistants": 5
 }
 
 # Set your keywords of interest - should always be there regardless if they are trending yesterday or not
-KEYWORDS_OF_INTEREST = ["AI", "Google", "AWS", "OpenAI", "ChatGPT", "Gemini", "Machine Learning", "LLMs", "Cloud"]
+KEYWORDS_OF_INTEREST = ["AI", "Google", "AWS", "OpenAI", "Machine Learning", "LLMs", "Cloud", "Serverless", "Lowcode", "No Code", "Make"]
 
 # Set a category as something that is always there - categories grabs the highest count rather than if trending
-CATEGORIES_OF_INTEREST = []
+CATEGORIES_OF_INTEREST = [{"category": "AI Models & Assistants", "limit": 10}]
 
 ########## SES Email Configs - Make sure you change these ########
 

@@ -78,7 +78,7 @@ def transform_and_append_sources(final_results):
             articles_data = response.json()
 
             # Process only up to the first 130 articles if more than 130 articles are returned (as we have a token limit)
-            articles_to_process = articles_data["articles"][:130]
+            articles_to_process = articles_data["articles"][:120]
 
             simplified_articles = [{
                 "text": article["text"],
