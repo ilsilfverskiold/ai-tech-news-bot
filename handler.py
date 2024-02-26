@@ -5,7 +5,7 @@ from collections import defaultdict
 def main(event, context):
 
     # Grab time period from the event (default is daily)
-    time_period = event.get('time_period', 'weekly')
+    time_period = event.get('time_period', 'daily')
 
     # 1. Get ids for each keyword of interest based on the config.py file
     final_results = fetch_and_process_trending_items(time_period)
