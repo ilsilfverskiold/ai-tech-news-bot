@@ -2,7 +2,7 @@ service: tech-bot
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.11
   stage: dev
   region: eu-north-1 # Change this to your preferred AWS region
   environment:
@@ -32,12 +32,12 @@ functions:
     reservedConcurrency: 5
     memorySize: 328
     events:
-      - schedule:
-          rate: cron(0 10 * * MON-FRI *) # Trigger at 11 AM UTC on weekdays
+      - eventBridge:
+          schedule: 'cron(0 10 ? * 2-6 *)' # Trigger at 10 AM UTC on weekdays
           input:
             time_period: "daily"
       - eventBridge:
-          schedule: 'cron(0 10 ? * FRI *)' # Trigger at 11 AM UTC every Friday
+          schedule: 'cron(0 10 ? * FRI *)' # Trigger at 10 AM UTC every Friday
           input:
             time_period: "weekly"
 
@@ -46,4 +46,4 @@ plugins:
 
 custom:
   pythonRequirements:
-    dockerizePip: non-linux
+    dockerizePip: true
