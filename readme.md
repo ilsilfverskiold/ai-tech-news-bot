@@ -16,6 +16,7 @@ If you need guidence or want to build the API yourself see this tutorial [here](
 - OpenAI API key
 - Python 3.8 or newer
 - Serverless Framework
+- Docker installed and running
 
 ## Getting Started
 
@@ -28,13 +29,13 @@ mkdir tech-bot
 cd tech-bot
 ```
 
-Make sure you have python installed.
+Make sure you have python installed. 
 
 ```bash
-python3 --version
+python --version
 ```
 
-If not, install it locally.
+If not, install it locally. Here it depends on which version you are on. If you are on 3.11 you don't need to do anything but if you are on a later or earlier version please change the runtime in the serverless.yml file.
 
 Make sure you have the Serverless Framework installed if not nstall it globally using npm
 
@@ -53,6 +54,18 @@ Clone this repository to your local machine:
 git clone https://github.com/ilsilfverskiold/ai-tech-news-bot.git
 cd ai-tech-news-bot
 ```
+
+### 3. (Optional) Make sure Docker is running
+
+Check that docker is running. If you do not want to package your dependencies with docker (which isn't really strictly necessary) then change the serverless.yml file like so.
+
+```bash
+custom:
+  pythonRequirements:
+    dockerizePip: false
+```
+
+At the moment it will be set to true.
 
 ### 3. Set up the environment
 
@@ -91,18 +104,27 @@ You'll get your credentials by creating an IAM user in the AWS console with some
     "Version": "2012-10-17",
     "Statement": [
         {
+            "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
-                "cloudformation:*",
-                "lambda:*",
-                "apigateway:*",
-                "logs:*",
-                "s3:*",
                 "iam:GetRole",
+                "events:DescribeRule",
+                "apigateway:*",
+                "s3:*",
+                "logs:*",
+                "events:PutRule",
+                "events:RemoveTargets",
+                "events:PutTargets",
+                "events:DeleteRule",
                 "iam:CreateRole",
-                "iam:PassRole",
+                "cloudformation:*",
+                "iam:AttachRolePolicy",
                 "iam:PutRolePolicy",
-                "iam:AttachRolePolicy"
+                "events:PutTargets",
+                "iam:PassRole",
+                "lambda:*",
+                "iam:TagRole",
+                "iam:UntagRole"
             ],
             "Resource": "*"
         }
