@@ -16,7 +16,7 @@ If you need guidence or want to build the API yourself see this tutorial [here](
 - OpenAI API key
 - Python 3.8 or newer
 - Serverless Framework
-- Docker installed and running
+- Docker installed and running (optional)
 
 ## Getting Started
 
