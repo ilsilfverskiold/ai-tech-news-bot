@@ -9,24 +9,25 @@ WORD_COUNT = '150'
 
 # Define category limits for the trending keywords - it will grab by top count first (check safron.io to look over your options)
 CATEGORY_LIMITS = {
-    "Subjects": 4,
-    "Tools & Services": 4,
-    "Websites & Applications": 4,
-    "Concepts & Methods": 4,
-    "Platforms & Search Engines": 4,
-    "Companies & Organizations": 4,
-    "Hardware & Systems": 4,
-    "Languages & Syntax": 4,
-    "Frameworks & Libraries": 3,
-    "People": 5,
-    "AI Models & Assistants": 5
+    "Subjects": 2,
+    "Tools & Services": 2,
+    "Websites & Applications": 2,
+    "Concepts & Methods": 2,
+    "Platforms & Search Engines": 2,
+    "Companies & Organizations": 2,
+    "Hardware & Systems": 2,
+    "Languages & Syntax": 2,
+    "Frameworks & Libraries": 2,
+    "People": 2,
+    "AI Models & Assistants": 2,
+    "Bucket (other)": 0
 }
 
 # Set your keywords of interest - should always be there regardless if they are trending yesterday or not
-KEYWORDS_OF_INTEREST = ["AI", "Google", "AWS", "OpenAI", "Machine Learning", "LLMs", "Cloud", "Serverless", "Lowcode", "No Code", "Make"]
+KEYWORDS_OF_INTEREST = ["AI", "AWS"]
 
 # Set a category as something that is always there - categories grabs the highest count rather than if trending
-CATEGORIES_OF_INTEREST = [{"category": "AI Models & Assistants", "limit": 10}]
+CATEGORIES_OF_INTEREST = [{"category": "AI Models & Assistants", "limit": 4}]
 
 ########## SES Email Configs - Make sure you change these ########
 

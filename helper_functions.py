@@ -12,7 +12,7 @@ from templates import trending_keyword_summary_template, interest_keyword_summar
 
 #############
 
-# Get keywords from https://safron.io/api/table based on config.py
+# Get keywords from https://safron.io/api/table
 def fetch_and_process_trending_items(time_period):
     print("...fetch keywords")
     response = requests.get(f"https://safron.io/api/table?period={time_period}")
@@ -20,40 +20,40 @@ def fetch_and_process_trending_items(time_period):
         raise Exception("Failed to fetch data from API")
     
     data = response.json()
+
     categories_of_interest_dict = {item["category"]: item["limit"] for item in CATEGORIES_OF_INTEREST}
-
-    # making sure that the data is updated to yesterday (or else we throw an error)
-    # update_date = datetime.strptime(data["update_date"], "%Y-%m-%d").date()
-    # if update_date != (datetime.now() - timedelta(days=1)).date():
-    #     raise Exception("Update date is not yesterday")
-
-    filtered_results = [
-        item for item in data["results"]
-        if item["trending"] or item["keyword"] in KEYWORDS_OF_INTEREST
-    ]
-
+    
+    all_items = data["results"]
+    trending_items = [item for item in all_items if item["trending"]]
+    keywords_added = set()
     final_results = []
-    categories_selected = defaultdict(int)
 
-    for item in filtered_results:
-        if item["keyword"] in KEYWORDS_OF_INTEREST:
-            final_results.append(item)
-            categories_selected[item["category"]] += 1
-
-    for category, limit in categories_of_interest_dict.items():
-        category_items = [item for item in filtered_results if item["category"] == category]
+    for coi in CATEGORIES_OF_INTEREST:
+        category, limit = coi["category"], coi["limit"]
+        category_items = [item for item in all_items if item["category"] == category]
         category_items_sorted = sorted(category_items, key=lambda x: x.get('rank', 0), reverse=True)[:limit]
         for item in category_items_sorted:
-            if item not in final_results:
-                final_results.append(item)
-                categories_selected[category] += 1
+            final_results.append(item)
+            keywords_added.add(item["keyword"])
 
-    for item in filtered_results:
-        if item["trending"] and item["keyword"] not in KEYWORDS_OF_INTEREST:
-            category = item["category"]
-            if categories_selected[category] < CATEGORY_LIMITS.get(category, 0) and category != "Bucket (other)" and category not in categories_of_interest_dict:
+    for category, limit in CATEGORY_LIMITS.items():
+        if category not in categories_of_interest_dict:
+            category_trending_items = [item for item in trending_items if item["category"] == category and item["keyword"] not in keywords_added]
+            category_trending_sorted = sorted(category_trending_items, key=lambda x: x.get('rank', 0), reverse=True)[:limit]
+            for item in category_trending_sorted:
                 final_results.append(item)
-                categories_selected[category] += 1
+                keywords_added.add(item["keyword"])
+
+    for keyword in KEYWORDS_OF_INTEREST:
+        if keyword not in keywords_added:
+            for item in all_items:
+                if item["keyword"] == keyword:
+                    final_results.append(item)
+                    keywords_added.add(keyword)
+                    break
+
+    final_results_details = ["Keyword: {}, Category: {}, Trending: {}".format(item["keyword"], item["category"], item.get("trending", False)) for item in final_results]
+    print("Final Results Details:\n" + "\n".join(final_results_details))
 
     return final_results
 
@@ -179,13 +179,13 @@ def categorize_and_structure_keywords(keyword_data):
             if len(trimmed_sources) == 2:
                 break
 
-        category = keyword_obj['category'] if keyword_obj.get('trending', False) else "Keywords of Interest"
         keyword_structure = {
             "keyword": keyword_obj['keyword'],
+            "trending": keyword_obj['trending'],
             "summary": keyword_obj['summary'],
             "top_sources": trimmed_sources
         }
-        categories[category].append(keyword_structure)
+        categories[keyword_obj['category']].append(keyword_structure)
 
     final_output = {
         "categories": [
@@ -205,10 +205,7 @@ def generate_category_summaries(categories, time_period):
     print("...generate category summaries")
 
     for category in categories['categories']:
-        if category['category'] == 'Keywords of Interest':
-            formatted_template = interest_category_summary_template.format(personality=personality, time_period=time_period)
-        else:
-            formatted_template = trending_category_summary_template.format(personality=personality, time_period=time_period)
+        formatted_template = interest_category_summary_template.format(personality=personality, time_period=time_period)
 
         combined_summaries = f"Summaries to summarize for the category {category['category']}:\n\n"
         
@@ -230,8 +227,7 @@ def build_welcome_message_with_summaries(categories_data, time_period):
     formatted_template = welcome_message_summary_template.format(personality=personality, time_period=time_period, name=NAME)
     
     for category in categories_data['categories']:
-        if 'category_summary' in category and category['category'] != 'Keywords of Interest':
-            all_summaries += f"Summary for {category['category']}:\n{category['category_summary']}\n\n"
+        all_summaries += f"Summary for {category['category']}:\n{category['category_summary']}\n\n"
     
     all_summaries = all_summaries.rstrip('\n')
     welcome_message = generate_response_openai(all_summaries, formatted_template)
@@ -262,21 +258,25 @@ def generate_html_report(data, time_period):
                     list-style-type: none;
                 }}
                 .divider {{ margin-top: 20px; margin-bottom: 20px; border-bottom: 1px solid #ccc; }}
+                .trending {{ font-weight: bold; }}
             </style>
         </head>
         <body>
-            <h1>Ciao {NAME}! Tha {time_period.capitalize()} Trending Tech Report</h1>
+            <h1>Ciao {NAME}! The {time_period.capitalize()} Trending Tech Report</h1>
             <p>{data['welcome_message']}</p>
             <div class="divider"></div>
     """
     
     for category in data['categories']:
-
         html_content += f"<h2>{category['category']}</h2>"
         html_content += f"<p>{category['category_summary']}</p>"
         
-        for keyword in category['keywords']:
-            html_content += f"<h3>{keyword['keyword']}</h3>"
+        # Sort keywords so that trending ones come first
+        sorted_keywords = sorted(category['keywords'], key=lambda x: x['trending'], reverse=True)
+        
+        for keyword in sorted_keywords:
+            trending_mark = "(Trending)" if keyword['trending'] else ""
+            html_content += f"<h3>{keyword['keyword']} {trending_mark}</h3>"
             html_content += f"<p>{keyword['summary']}</p>"
             html_content += f"<h4>Source(s)</h4>"
             html_content += "<ul>"
