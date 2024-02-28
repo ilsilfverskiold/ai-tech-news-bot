@@ -24,10 +24,10 @@ CATEGORY_LIMITS = {
 }
 
 # Set your keywords of interest - should always be there regardless if they are trending yesterday or not
-KEYWORDS_OF_INTEREST = ["AI", "AWS"]
+KEYWORDS_OF_INTEREST = ["AI", "AWS", "Google", "LLMs", "Nvidia"]
 
 # Set a category as something that is always there - categories grabs the highest count rather than if trending
-CATEGORIES_OF_INTEREST = [{"category": "AI Models & Assistants", "limit": 4}]
+CATEGORIES_OF_INTEREST = []
 
 ########## SES Email Configs - Make sure you change these ########
 
