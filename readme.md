@@ -172,7 +172,7 @@ CATEGORY_LIMITS = {
 
 KEYWORDS_OF_INTEREST = ["Docker", "AWS", "AI"] # will always be includes regardles if trending or not
 
-CATEGORIES_OF_INTEREST = [{"category": "Platforms & Search Engines", "limit": 6}, {"category": "Tools & Services", "limit": 6}] # set the categories rather than keywords
+CATEGORIES_OF_INTEREST = [["Platforms & Search Engines"]] # set the categories rather than keywords will get the top 2 results - change the code in the helper_functions if you want more keywords
 ```
 
 Remember to keep it condensed or it may be too much information to digest (for yourself I mean). 
