@@ -118,7 +118,7 @@ def transform_and_append_sources(final_results, max_retries=2):
         success = False
         while attempts < max_retries and not success:
             try:
-                params = {"limit": 120}
+                params = {"limit": 110}
                 payload = {"ids": source_ids}
 
                 response = requests.post(
