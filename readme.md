@@ -6,7 +6,7 @@ The end result is a newsletter/report built on getting search data for tech site
 
 See the config.py file for setting specific categories or keywords. See the example newsletter that has been generated here.
 
-The project is free to use and will only cost you the OpenAI tokens, about $0.05 per report. 
+The project is free to use and will only cost you the OpenAI tokens, about $0.05 per report. You may change the OpenAI LLM model.
 
 If you need guidence or want to build the API yourself see this tutorial [here](https://levelup.gitconnected.com/build-a-personal-ai-tech-news-agent-94e7a2e508fe) and [here](https://medium.com/gitconnected/predicting-tech-trends-with-natural-language-processing-9d9ce1c082d3).
 

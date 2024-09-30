@@ -13,6 +13,9 @@ def main(event, context):
     # 2. Transform and append sources to each result
     transformed_results = transform_and_append_sources(final_results)
 
+    keywords_only = [item['keyword'] for item in transformed_results if 'keyword' in item]
+    print("keywords found: ", keywords_only)
+
     # 3. Get summaries for each keyword with openai
     transformed_results_with_summaries = summarize_sources(transformed_results, time_period)
 

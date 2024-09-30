@@ -5,7 +5,7 @@ NAME = "Ida"
 MODEL_NAME = "gpt-3.5-turbo-0125"
 
 # Word count for keyword summaries (the longer the more detailed the summaries will be)
-WORD_COUNT = '150'
+WORD_COUNT = '50'
 
 # Define category limits for the trending keywords - it will grab by top count first (check safron.io to look over your options)
 CATEGORY_LIMITS = {
@@ -26,8 +26,8 @@ CATEGORY_LIMITS = {
 # Set your keywords of interest - should always be there regardless if they are trending yesterday or not
 KEYWORDS_OF_INTEREST = ["AI", "AWS", "Google", "LLMs", "Nvidia"]
 
-# Set a category as something that is always there - categories grabs the highest count rather than if trending
-CATEGORIES_OF_INTEREST = []
+# Set a category as something that is always there - categories grabs the first 2 highest count rather than if trending
+CATEGORIES_OF_INTEREST = ["Platforms & Search Engines"]
 
 ########## SES Email Configs - Make sure you change these ########
 

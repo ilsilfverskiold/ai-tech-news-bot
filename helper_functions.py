@@ -4,99 +4,159 @@ from openai import OpenAI
 from botocore.exceptions import ClientError
 from datetime import datetime, timedelta
 from collections import defaultdict
+from urllib.parse import quote
 import os
 
 # Configs & System Templates
 from config import WORD_COUNT, CATEGORY_LIMITS, KEYWORDS_OF_INTEREST, MODEL_NAME, NAME, CATEGORIES_OF_INTEREST, SOURCE_EMAIL, TO_ADRESS, AWS_REGION_NAME
 from templates import trending_keyword_summary_template, interest_keyword_summary_template, trending_category_summary_template, interest_category_summary_template, welcome_message_summary_template, personality
 
+sourceMapping = {
+    "subjects": "Subjects",
+    "companies": "Companies & Organizations",
+    "ai": "AI Models & Assistants",
+    "frameworks": "Frameworks & Libraries",
+    "languages": "Languages & Syntax",
+    "concepts": "Concepts & Methods",
+    "tools": "Tools & Services",
+    "platforms": "Platforms & Search Engines",
+    "hardware": "Hardware & Systems",
+    "websites": "Websites & Applications",
+    "people": "People",
+    "bucket": "Bucket (other)"
+}
+
 #############
 
-# Get keywords from https://safron.io/api/table
+# fetch keyword data/stats via https://public.api.safron.io/v2/keywords (see https://docs.safron.io/keywords#public-v2)
 def fetch_and_process_trending_items(time_period):
     print("...fetch keywords")
-    response = requests.get(f"https://safron.io/api/table?period={time_period}")
-    if response.status_code != 200:
-        raise Exception("Failed to fetch data from API")
-    
-    data = response.json()
-
-    categories_of_interest_dict = {item["category"]: item["limit"] for item in CATEGORIES_OF_INTEREST}
-    
-    all_items = data["results"]
-    trending_items = [item for item in all_items if item["trending"]]
-    keywords_added = set()
     final_results = []
 
-    for coi in CATEGORIES_OF_INTEREST:
-        category, limit = coi["category"], coi["limit"]
-        category_items = [item for item in all_items if item["category"] == category]
-        category_items_sorted = sorted(category_items, key=lambda x: x.get('rank', 0), reverse=True)[:limit]
-        for item in category_items_sorted:
-            final_results.append(item)
-            keywords_added.add(item["keyword"])
+    inverse_mapping = {v: k for k, v in sourceMapping.items()}
 
-    for category, limit in CATEGORY_LIMITS.items():
-        if category not in categories_of_interest_dict:
-            category_trending_items = [item for item in trending_items if item["category"] == category and item["keyword"] not in keywords_added]
-            category_trending_sorted = sorted(category_trending_items, key=lambda x: x.get('rank', 0), reverse=True)[:limit]
-            for item in category_trending_sorted:
-                final_results.append(item)
-                keywords_added.add(item["keyword"])
+    for short_name, full_name in sourceMapping.items():
+        if full_name in CATEGORY_LIMITS:
+            limit = CATEGORY_LIMITS[full_name]
+            if limit == 0:
+                continue
+            
+            params = {
+                "category": short_name,
+                "period": time_period,
+                "slim": "false",
+                "limit": limit,
+                "sort": "trending"
+            }
+            response = requests.get("https://public.api.safron.io/v2/keywords", params=params)
+            if response.status_code != 200:
+                print(f"Failed to fetch data for category '{full_name}'. Status code: {response.status_code}")
+                continue
+            
+            data = response.json()
+            keywords = data.get("keywords", [])
+            sorted_keywords = sorted(
+                [item for item in keywords if item.get("trending", False)],
+                key=lambda x: x.get("engagement", 0),
+                reverse=True
+            )[:limit]
+            final_results.extend(sorted_keywords)
 
     for keyword in KEYWORDS_OF_INTEREST:
-        if keyword not in keywords_added:
-            for item in all_items:
-                if item["keyword"] == keyword:
-                    final_results.append(item)
-                    keywords_added.add(keyword)
-                    break
+        encoded_keyword = quote(keyword) 
+        params = {
+            "search": encoded_keyword,
+            "period": time_period,
+            "slim": "false",
+            "limit": 1 
+        }
+        response = requests.get("https://public.api.safron.io/v2/keywords", params=params)
+        if response.status_code == 200:
+            data = response.json()
+            keywords = data.get("keywords", [])
+            if keywords:
+                final_results.extend(keywords)
 
-    final_results_details = ["Keyword: {}, Category: {}, Trending: {}".format(item["keyword"], item["category"], item.get("trending", False)) for item in final_results]
-    print("Final Results Details:\n" + "\n".join(final_results_details))
+    for category in CATEGORIES_OF_INTEREST:
+        short_category = inverse_mapping.get(category)  
+        if not short_category:
+            print(f"No short mapping found for category '{category}'. Skipping.")
+            continue
+
+        params = {
+            "category": short_category,
+            "period": time_period,
+            "slim": "false",
+            "limit": 2,  
+            "sort": "top"
+        }
+        response = requests.get("https://public.api.safron.io/v2/keywords", params=params)
+        if response.status_code == 200:
+            data = response.json()
+            keywords = data.get("keywords", [])
+            final_results.extend(keywords)
 
     return final_results
 
+
 ##################### 
 
-# Get sources from https://safron.io/api/sources
-def transform_and_append_sources(final_results):
+# Fetch sources for the keywords via https://public.api.safron.io/v2/sources (see https://docs.safron.io/sources#public-v2)
+def transform_and_append_sources(final_results, max_retries=2):
     print("...transform_and_append_sources")
     transformed_results = []
 
     for result in final_results:
-        row_ids = result["row_ids"]
-        simplified_result = {
-            "keyword": result["keyword"],
-            "count": result["count"],
-            "category": result["category"],
-            "trending": result["trending"]
-        }
-        try:
-            response = requests.post("https://safron.io/api/sources", json={"ids": row_ids})
-            response.raise_for_status()
-            articles_data = response.json()
+        source_ids = result.get("sources", [])
+        keyword = result.get("keyword", "Unknown")
 
-            # Process only up to the first 130 articles if more than 130 articles are returned (as we have a token limit)
-            articles_to_process = articles_data["articles"][:120]
+        if not source_ids:
+            print(f"No source IDs found for keyword: {keyword}. Skipping this keyword entirely.")
+            continue 
 
-            simplified_articles = [{
-                "text": article["text"],
-                "published": article["published"],
-                "source": article["source"],
-                "medium": article["medium"],
-                "relevance": article["relevance"],
-                "sentiment_label": article["sentiment_label"],
-                "url": article["url"],
-                "type": article["type"]
-            } for article in articles_to_process]
+        attempts = 0
+        success = False
+        while attempts < max_retries and not success:
+            try:
+                params = {"limit": 120}
+                payload = {"ids": source_ids}
 
-            simplified_result["sources"] = simplified_articles
-        except requests.exceptions.RequestException as e:
-            print(f"Failed to fetch or process articles for row_ids {row_ids}. Error: {e}")
-            simplified_result["sources"] = [] 
+                response = requests.post(
+                    "https://public.api.safron.io/v2/sources",
+                    params=params,
+                    json=payload
+                )
+                response.raise_for_status()  
+                articles_data = response.json()
+                articles_to_process = articles_data.get("articles", [])
 
-        transformed_results.append(simplified_result)
+                if articles_to_process: 
+                    simplified_articles = [{
+                        "text": article.get("text", ""),
+                        "published": article.get("published", ""),
+                        "source": article.get("source", ""),
+                        "type": article.get("type", ""),
+                        "sentiment_label": article.get("sentiment", ""),
+                        "url": article.get("link", ""),
+                        "relevance": article.get("engagement", "")
+                    } for article in articles_to_process]
+
+                    simplified_result = {
+                        "keyword": keyword,
+                        "count": result.get("count", 0),
+                        "category": result.get("category", "Unknown"),
+                        "trending": result.get("trending", False),
+                        "sources": simplified_articles
+                    }
+                    transformed_results.append(simplified_result)
+                    success = True
+
+            except requests.exceptions.RequestException as e:
+                attempts += 1
+                print(f"Attempt {attempts} failed for keyword '{keyword}'. Error: {e}")
+
+        if not success:
+            print(f"All retries failed for keyword '{keyword}'. This keyword will be removed from the results.")
 
     return transformed_results
 
@@ -171,8 +231,7 @@ def categorize_and_structure_keywords(keyword_data):
                 trimmed_sources.append({
                     "text": source['text'],
                     "url": source['url'],
-                    "source": source['source'],
-                    "medium": source['medium']
+                    "source": source['source']
                 })
                 seen_titles.add(trimmed_and_lowered_title)
             
@@ -284,9 +343,8 @@ def generate_html_report(data, time_period):
                 title = source['text']
                 url = source['url']
                 source_name = source['source']
-                medium = source['medium']
                 trimmed_title = (title[:147] + '...') if len(title) > 150 else title
-                html_content += f'<li><a href="{url}">{trimmed_title} (Source: {medium} at {source_name})</a></li>'
+                html_content += f'<li><a href="{url}">{trimmed_title} (Source: {source_name})</a></li>'
             html_content += "</ul>"
         
         html_content += '<div class="divider"></div>'
