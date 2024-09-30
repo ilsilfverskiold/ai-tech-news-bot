@@ -1,5 +1,7 @@
 # AI Tech News Crawler and Newsletter Bot
 
+**Updated 30th of September 2024 - uses an updated endpoint**
+
 This project is a serverless AI tech news crawler that uses AWS Lambda and EventBridge via the Serverless Framework to summarize keyword and category data based on a [trending keywords API](https://docs.safron.io/) built with natural language processing. 
 
 The end result is a newsletter/report built on getting search data for tech sites for specific keywords that are trending within various categories specified by you. You can track keywords or you can track trending keywords within certain categories, and then use an LLM to summarize what is happening with these keywords themselves.
