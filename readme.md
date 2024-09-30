@@ -193,16 +193,16 @@ Modify the templates.py file if you wish to change the bot's messaging style or 
 
 ### Optional: Tweak the scheduled events
 
-Go to the serverless.yml file to tweak when the newsletters go out. The API usually gets new data before 10 AM UTC.
+Go to the serverless.yml file to tweak when the newsletters go out. The API usually gets new data before 8 AM UTC (it updates between 6-7 am UTC).
 
 ```yml
 events:
     - eventBridge:
-        schedule: 'cron(0 10 ? * 2-6 *)' # Trigger at 10 AM UTC on weekdays
+        schedule: 'cron(0 8 ? * 2-6 *)' # Trigger at 8 AM UTC on weekdays
         input:
             time_period: "daily"
     - eventBridge:
-        schedule: 'cron(0 10 ? * FRI *)' # Trigger at 10 AM UTC every Friday
+        schedule: 'cron(0 8 ? * FRI *)' # Trigger at 8 AM UTC every Friday
         input:
             time_period: "weekly"
 ```

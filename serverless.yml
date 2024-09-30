@@ -33,11 +33,11 @@ functions:
     memorySize: 328
     events:
       - eventBridge:
-          schedule: 'cron(0 10 ? * 2-6 *)' # Trigger at 10 AM UTC on weekdays
+          schedule: 'cron(0 8 ? * 2-6 *)' # Trigger at 10 AM UTC on weekdays
           input:
             time_period: "daily"
       - eventBridge:
-          schedule: 'cron(0 10 ? * FRI *)' # Trigger at 10 AM UTC every Friday
+          schedule: 'cron(0 8 ? * FRI *)' # Trigger at 10 AM UTC every Friday
           input:
             time_period: "weekly"
 
